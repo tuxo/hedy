@@ -1,0 +1,21 @@
+---
+  1:
+    intro_text: "في المستوى 1 ، يمكنك استخدام الأوامر Hedy!,   مرحبًا بك في `print`, `ask` and `echo`. اضغط على الزر الأزرق وسيتم كتابة الرمز نيابة عنك! جرب الشفرة بنفسك باستخدام الزر الأخضر تشغيل الرمز أسفل حقل البرمجة الأيسر. "
+    start_code: "print طباعة مرحبا العالم!"
+    commands:
+      -
+        name: "print"
+        explanation: "طباعة شيء مع `print`."
+        example: " مثال print طباعة مرحبا العالم!"
+        demo_code: "print طباعة مرحبا العالم!"
+      -
+        name: "ask"
+        explanation: "  اسأل شيئًا مع `ask`."
+        example: " مثال: ask ما هو لونك المفضل؟"
+        demo_code: "ask ما هو لونك المفضل؟"
+      -
+        name: "echo"
+        explanation: " كرر شيء باستخدام `echo`."
+        example: " مثال: echo حتى لونك المفضل هو ... "
+        demo_code: "ask ما هو اللون المفضل لديك؟ «  echo » so لونك المفضل هو..."
+

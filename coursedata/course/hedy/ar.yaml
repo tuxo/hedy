@@ -1,0 +1,3 @@
+# This file seems rather empty but the assignments all use the defaults from 'level-defaults'
+course:
+  - level: "1"
