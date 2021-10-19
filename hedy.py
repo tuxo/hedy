@@ -688,7 +688,7 @@ class ConvertToPython_3(ConvertToPython_2):
 
     def check_print_arguments(self, args):
         # this function checks whether arguments of a print are valid
-        #we can print if all arguments are either quoted OR they are all variables
+        # we can print if all arguments are either quoted OR they are all variables
 
         unquoted_args = [a for a in args if not is_quoted(a)]
         unquoted_in_lookup = [a in self.lookup for a in unquoted_args]

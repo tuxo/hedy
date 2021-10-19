@@ -5,6 +5,7 @@ ui:
     docs_title: "解释"
     contact: "联系方式"
     video_title: "视频"
+    auto_repair_code: "Repair my code"
     run_code_button: "运行代码"
     read_code_label: "大声朗读"
     save_code_button: "保存代码"

@@ -5,6 +5,7 @@ ui:
     docs_title: "Explanation"
     contact: "Contact"
     video_title: "Videos"
+    auto_repair_code: "Repair my code"
     run_code_button: "Run code"
     read_code_label: "Read aloud"
     save_code_button: "Save code"

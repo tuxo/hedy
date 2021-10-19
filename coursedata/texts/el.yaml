@@ -5,6 +5,7 @@ ui:
     docs_title: 'Εξήγηση'
     contact: 'Επικοινωνία'
     video_title: 'Βίντεο'
+    auto_repair_code: 'Repair my code'
     run_code_button: 'Εκτέλεσε κώδικα'
     read_code_label: 'Εκφωνούν'
     save_code_button: 'Αποθήκευσε κώδικα'

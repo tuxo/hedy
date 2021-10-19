@@ -142,8 +142,9 @@ function runit(level, lang, cb) {
   if (window.State.disable_run) return window.modal.alert (window.auth.texts.answer_question);
 
   if (reloadOnExpiredSession ()) return;
-
   error.hide();
+
+
   try {
     level = level.toString();
     var editor = ace.edit("editor");
@@ -169,11 +170,13 @@ function runit(level, lang, cb) {
       }
       if (response.Error) {
         error.show(ErrorMessages.Transpile_error, response.Error);
+        document.getElementById("repair_button").style.visibility = "visible";
         return;
       }
       runPythonProgram(response.Code, response.has_turtle, cb).catch(function(err) {
         console.log(err)
         error.show(ErrorMessages.Execute_error, err.message);
+        document.getElementById("repair_button").style.visibility = "visible";
         reportClientError(level, code, err.message);
       });
     }).fail(function(xhr) {
@@ -707,3 +710,4 @@ window.prompt_unsaved = function prompt_unsaved(cb) {
   window.State.no_unload_prompt = true;
   window.modal.confirm (window.auth.texts.unsaved_changes, cb);
 }
+

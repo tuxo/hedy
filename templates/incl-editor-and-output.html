@@ -89,6 +89,7 @@
       <br>
       <div class="flex justify-between">
         <button id="runit" class="green-btn" onclick="runit({{ level }}, '{{ lang }}')">{{run_code_button}}</button>
+        <button id="repair_button" class="green-btn" style="visibility: hidden">{{auto_repair_code}}</button>
         {% if show_edit_button %}
         <a href="/hedy/{{level}}/{{program_id}}" class="btn blue-btn">{{edit_code_button}}</a>
         {% endif %}

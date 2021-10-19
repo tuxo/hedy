@@ -5,6 +5,7 @@ ui:
     docs_title: "Utlis"
     contact: "Kontakt"
     video_title: "Fideo's"
+    auto_repair_code: "Repair my code"
     try_button: "Besykje"
     run_code_button: "Koade draaie"
     read_code_label: "Lês foar"

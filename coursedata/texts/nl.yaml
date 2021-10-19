@@ -5,6 +5,7 @@ ui:
     docs_title: "Uitleg"
     contact: "Contact"
     video_title: "Video's"
+    auto_repair_code: "Repair my code"
     try_button: "Probeer"
     run_code_button: "Voer de code uit"
     read_code_label: "Lees voor"

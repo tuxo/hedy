@@ -5,6 +5,7 @@ ui:
     docs_title: Vysvětlení
     contact: Kontakt
     video_title: Videa
+    auto_repair_code: Repair
     run_code_button: Spustit kód
     read_code_label: Přečíst kód nahlas
     save_code_button: Uložit kód

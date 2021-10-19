@@ -5,6 +5,7 @@ ui:
     docs_title: "Magyarázat"
     contact: "Kapcsolat"
     video_title: "Videók"
+    auto_repair_code: "Repair my code"
     run_code_button: "Kód futtatása"
     read_code_label: 'Hangosan olvas'
     save_code_button: "Kód mentése"
