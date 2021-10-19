@@ -56,7 +56,10 @@ def hash_var(name):
     if '[' in name or '(' in name:
         return name
 
-    if name in reserved_words or character_skulpt_cannot_parse.search(name) != None:
+    if name in reserved_words:
+        return "__hedy_" + name
+
+    if character_skulpt_cannot_parse.search(name) != None:
         # hash "illegal" var names
         # being reservered keywords
         # or non-latin vars to comply with Skulpt, which does not implement PEP3131 :(

@@ -148,8 +148,8 @@ class TestsLevel3(HedyTester):
     result = hedy.transpile(code, self.level)
 
     expected = textwrap.dedent("""\
-    vd55669822f1a8cf72ec1911e462a54eb = 'Hedy'
-    print(f'ik heet {vd55669822f1a8cf72ec1911e462a54eb}')""")
+    __hedy_for = 'Hedy'
+    print(f'ik heet {__hedy_for}')""")
 
     self.assertEqual(expected, result.code)
     self.assertEqual(False, result.has_turtle)
