@@ -50,16 +50,13 @@ characters_that_need_escaping = ["\\", "'"]
 
 character_skulpt_cannot_parse = re.compile('[^a-zA-Z0-9_]')
 
-def hash_needed(name):
+def hash_var(name):
     # some elements are not names but processed names, i.e. random.choice(dieren)
     # they should not be hashed (this won't break because these characters cannot be used in vars
     if '[' in name or '(' in name:
-        return False
+        return name
 
-    return name in reserved_words or character_skulpt_cannot_parse.search(name) != None
-
-def hash_var(name):
-    if hash_needed(name):
+    if name in reserved_words or character_skulpt_cannot_parse.search(name) != None:
         # hash "illegal" var names
         # being reservered keywords
         # or non-latin vars to comply with Skulpt, which does not implement PEP3131 :(
