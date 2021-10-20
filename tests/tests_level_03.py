@@ -155,11 +155,18 @@ class TestsLevel3(HedyTester):
     self.assertEqual(False, result.has_turtle)
 
   # negative tests
-  def test_print_without_quotes(self):
+  def test_print_without_quotes_gives_UnquotedText(self):
+    code = "print felienne 123"
     with self.assertRaises(hedy.UnquotedTextException) as context:
-      result = hedy.transpile("print felienne 123", self.level)
+      result = hedy.transpile(code, self.level)
 
-    self.assertEqual('Unquoted Text', context.exception.error_code)  # hier moet nog we een andere foutmelding komen!
+    self.assertEqual('Unquoted Text', context.exception.error_code)
+  def test_access_before_assign_not_allowed(self):
+    code = textwrap.dedent("""\
+    print 'my name is ' name
+    name is Hedy""")
+    with self.assertRaises(hedy.AccessBeforeAssign) as context:
+      result = hedy.transpile(code, self.level)
 
   #combined tests
   def test_assign_print_bengali(self):

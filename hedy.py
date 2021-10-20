@@ -166,6 +166,10 @@ class IncompleteCommandException(HedyException):
     def __init__(self, **arguments):
         super().__init__('Incomplete', **arguments)
 
+class AccessBeforeAssign(HedyException):
+    def __init__(self, **arguments):
+        super().__init__('Access Before Assign', **arguments)
+
 class UnquotedTextException(HedyException):
     def __init__(self, **arguments):
         super().__init__('Unquoted Text', **arguments)
@@ -215,8 +219,20 @@ class AllAssignmentCommands(Transformer):
     # returns a list of variable and list access
     # so these can be excluded when printing
 
-    # relevant nodes (list acces, ask, assign) are transformed into strings
+    # relevant nodes (list access, ask, assign) are transformed into strings
     # higher in the tree (through default rule), we filter on only string arguments, of lists with string arguments
+
+    def program(self, args):
+        # we want to store the command numbers of assignments to check if there is usage before assign
+        # note that command numbers are 1-based
+
+        commands_and_numbers = []
+        number = 1
+        for command in args:
+            commands_and_numbers.append((command, number))
+            number += 1
+
+        return commands_and_numbers
 
     def filter_ask_assign(self, args):
         ask_assign = []
@@ -1344,7 +1360,8 @@ def transpile_inner(input_string, level):
 
         # also add hashes to list
         # note that we do not (and cannot) hash the var names only, we also need to be able to process
-        # random.choice(প্রাণী)
+        # command like random.choice(প্রাণী), so we need to do a hash at the inner level there
+        # this function takes care of that:
         hashed_lookups = AllAssignmentCommandsHashed().transform(abstract_syntaxtree)
 
         lookup_table += hashed_lookups
