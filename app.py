@@ -539,7 +539,7 @@ def get_quiz(level_source, question_nr, attempt):
                                    is_teacher=is_teacher(request),
                                    auth=TRANSLATIONS.get_translations(requested_lang(), 'Auth'))
 
-@app.route('/quiz/submit_answer/<level_source>/<question_nr>/<attempt>', methods=["POST"])
+@app.route('/submit_answer/<level_source>/<question_nr>/<attempt>', methods=["POST"])
 def submit_answer(level_source, question_nr, attempt):
     if not config.get('quiz-enabled') and g.lang != 'nl':
         return utils.page_404 (TRANSLATIONS, render_main_menu('adventures'), current_user(request) ['username'], requested_lang (), 'Hedy quiz disabled!')
