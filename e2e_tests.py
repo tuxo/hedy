@@ -1,6 +1,9 @@
 import requests
 import json
 import random
+
+from flask import session
+
 from utils import timems
 import urllib.parse
 from config import config
@@ -389,6 +392,167 @@ def checkJoinLink (state, response, username):
     if not re.search ('http://localhost:\d\d\d\d/class/' + state ['classes'] [0] ['id'] + '/prejoin/' + state ['classes'] [0] ['link'], response ['body']):
         raise Exception ('Invalid redirect')
 
+
+def testQuiz(tag, tests):
+
+    bodies = tests()
+    output = []
+    counter = 1
+    if config['quiz-enabled']:
+        for body in bodies:
+            testArray = [tag + ' #' + str(counter) + body[0], body[1], body[2], body[3], body[4], body[5]]
+            testArray.append(body[6]) if len(body) == 7 else None
+            output.append(testArray)
+            counter += 1
+        return output
+    else:
+        output[5] = 404
+        return output
+
+
+def happyFlowTestCasesQuiz():
+    return [['get quiz start', 'get', '/quiz/start/1', {}, {}, 200],
+            ['get quiz question with valid level', 'get', '/quiz/quiz_questions/1/1/1', {},{}, 200, postQuizFormData],
+            ['submit answer of quiz', 'post', '/submit_answer/1/1/1', {}, {'radio_option': '1-B'}, 200, checkQuizSessionVarsAttempt1],
+            ['submit answer of quiz', 'post', '/submit_answer/1/1/2', {}, {'radio_option': '1-C'}, 200, checkQuizSessionVarsAttempt2],
+            ['submit answer of quiz', 'post', '/submit_answer/1/1/3', {}, {'radio_option': '1-A'}, 200, checkQuizSessionVarsAttempt3],
+            ['submit answer of quiz', 'post', '/submit_answer/1/2/1', {}, {'radio_option': '1-A'}, 200, checkQuizSessionVarsQ2Attempt1],
+            ['submit answer of quiz', 'post', '/submit_answer/1/2/2', {}, {'radio_option': '1-D'}, 200, checkQuizSessionVarsQ2Attempt2]
+
+            ]
+
+
+
+def invalidTestCasesQuiz():
+    return [
+        ['invalid quiz start', 'get', '/quiz/start/a', {}, {}, 403],
+        ['get quiz question with invalid level', 'get', '/quiz/quiz_questions/1000/1/1', {},{}, 404],
+        ['submit answer of quiz at invalid level', 'post', '/submit_answer/1000/1/1', {}, {}, 404,
+         checkQuizSessionVarsAttempt1],
+        ['submit answer of quiz at invalid level', 'post', '/submit_answer/1000/1/1', {}, {}, 404,
+         checkQuizSessionVarsAttempt1]
+    ]
+
+
+# def checkSubmittedAnswer(state, response, username):
+#     add state variables and request form variables to pass to next endpoint
+
+def postQuizFormData(state, response, correctOption):
+
+    state['radio_option'] = flaskRequest.form["radio_option"]
+    if correctOption not in state['radio_option']:
+        raise Exception('Chosen answer does not match with the correct answer')
+    return
+
+def checkQuizSessionVarsAttempt1(state, response, username):
+    postQuizFormData(state,response, "A")
+    if not 'quiz-attempt' in response['body']['session']:
+        raise Exception('No quiz-attempt variable set')
+    if not 'total_score' in response['body']['session']:
+        raise Exception('No total_score variable set')
+    if not session['correct_answer'] in response['body']['session']:
+        raise Exception('No correct answer variable set')
+    if config['quiz-max-attempts'] != 4:
+        raise Exception('The value of the nr of maximum attempts is invalid')
+    if state['quiz-attempt'] != 1:
+        raise Exception('Quiz attempt is not 1x')
+    if state['total_score'] != 5:
+        raise Exception('Total score does not equal 5')
+    if state['correct_answer'] != 1:
+        raise Exception('Total score does not equal 5')
+    state['quiz-attempt'] = response['body']['session']['quiz-attempt']
+    state['total_score'] = response['body']['session']['total_score']
+    state['correct_answer'] = response['body']['session']['correct_answer']
+
+
+def checkQuizSessionVarsAttempt2(state, response, username):
+    postQuizFormData(state,response, "A")
+    if not 'quiz-attempt' in response['body']['session']:
+        raise Exception('No quiz-attempt variable set')
+    if not 'total_score' in response['body']['session']:
+        raise Exception('No total_score variable set')
+    if not session['correct_answer'] in response['body']['session']:
+        raise Exception('No correct answer variable set')
+    if config['quiz-max-attempts'] != 4:
+        raise Exception('The value of the nr of maximum attempts is invalid')
+    if state['quiz-attempt'] != 2:
+        raise Exception('Quiz attempt is not 2x')
+    if state['total_score'] != (10 / 3):
+        raise Exception('Total score does not equal 10.333')
+    if state['correct_answer'] != 1:
+        raise Exception('Total score does not equal to 1')
+
+    state['quiz-attempt'] = response['body']['session']['quiz-attempt']
+    state['total_score'] = response['body']['session']['total_score']
+    state['correct_answer'] = response['body']['session']['correct_answer']
+
+
+def checkQuizSessionVarsAttempt3(state, response, username):
+    postQuizFormData(state,response, "A")
+    if not 'quiz-attempt' in response['body']['session']:
+        raise Exception('No quiz-attempt variable set')
+    if not 'total_score' in response['body']['session']:
+        raise Exception('No total_score variable set')
+    if not session['correct_answer'] in response['body']['session']:
+        raise Exception('No correct answer variable set')
+    if config['quiz-max-attempts'] != 4:
+        raise Exception('The value of the nr of maximum attempts is invalid')
+    if state['quiz-attempt'] != 3:
+        raise Exception('Quiz attempt is not 3x')
+    if state['total_score'] != (5 / 3):
+        raise Exception('Total score does not equal 10.333')
+    if state['correct_answer'] != 1:
+        raise Exception('Total score does not equal to 1')
+
+    state['quiz-attempt'] = response['body']['session']['quiz-attempt']
+    state['total_score'] = response['body']['session']['total_score']
+    state['correct_answer'] = response['body']['session']['correct_answer']
+
+
+def checkQuizSessionVarsQ2Attempt1(state, response, username):
+    postQuizFormData(state,response,"D")
+    if not 'quiz-attempt' in response['body']['session']:
+        raise Exception('No quiz-attempt variable set')
+    if not 'total_score' in response['body']['session']:
+        raise Exception('No total_score variable set')
+    if not session['correct_answer'] in response['body']['session']:
+        raise Exception('No correct answer variable set')
+    if config['quiz-max-attempts'] != 4:
+        raise Exception('The value of the nr of maximum attempts is invalid')
+    if state['quiz-attempt'] != 2:
+        raise Exception('Quiz attempt is not 3x')
+    if state['total_score'] != (5/ 3):
+        raise Exception('Total score does not equal to previous score 1.666')
+    if state['correct_answer'] != 1:
+        raise Exception('Total score does not equal to 1')
+
+    state['quiz-attempt'] = response['body']['session']['quiz-attempt']
+    state['total_score'] = response['body']['session']['total_score']
+    state['correct_answer'] = response['body']['session']['correct_answer']
+
+
+def checkQuizSessionVarsQ2Attempt2(state, response, username):
+    postQuizFormData(state,response, "D")
+    if not 'quiz-attempt' in response['body']['session']:
+        raise Exception('No quiz-attempt variable set')
+    if not 'total_score' in response['body']['session']:
+        raise Exception('No total_score variable set')
+    if not session['correct_answer'] in response['body']['session']:
+        raise Exception('No correct answer variable set')
+    if config['quiz-max-attempts'] != 4:
+        raise Exception('The value of the nr of maximum attempts is invalid')
+    if state['quiz-attempt'] != 3:
+        raise Exception('Quiz attempt is not 2x')
+    if state['total_score'] != (20 / 3):
+        raise Exception('Total score does not equal 6.6666')
+    if state['correct_answer'] != 2:
+        raise Exception('Total score does not equal to 2')
+
+    state['quiz-attempt'] = response['body']['session']['quiz-attempt']
+    state['total_score'] = response['body']['session']['total_score']
+    state['correct_answer'] = response['body']['session']['correct_answer']
+
+
 def suite (username):
     return [
         # Session variables
@@ -410,6 +574,9 @@ def suite (username):
         ['verify email (invalid token)', 'get', lambda state: '/auth/verify?' + urllib.parse.urlencode ({'username': username, 'token': 'foobar'}), {}, '', 403],
         ['verify email', 'get', lambda state: '/auth/verify?' + urllib.parse.urlencode ({'username': username, 'token': state ['token']}), {}, '', 302],
         ['valid login', 'post', '/auth/login', {}, {'username': username, 'password': 'foobar'}, 200, setSentCookies],
+
+        testQuiz('test quiz functions that will succeed', happyFlowTestCasesQuiz),
+
         invalidMap ('change password', 'post', '/auth/change_password', ['', [], {}, {'foo': 'bar'}, {'old_password': 1}, {'old_password': 'foobar'}, {'old_password': 'foobar', 'new_password': 1}, {'old_password': 'foobar', 'new_password': 'short'}]),
         ['change password', 'post', '/auth/change_password', {}, {'old_password': 'foobar', 'new_password': 'foobar2'}, 200],
         ['invalid login after password change', 'post', '/auth/login', {}, {'username': username, 'password': 'foobar'}, 403],

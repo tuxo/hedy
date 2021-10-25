@@ -19,6 +19,24 @@
                 }
             }
 
+
+            $(document).ready(function () {
+                $("form").submit(function (event) {
+                    var formData = {
+                        "radioValue": $("#radio-button").val(),
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url:"/submit_answer/{{ level_source }}/{{ question_nr }}/{{attempt|int + 1 }}",
+                        data: JSON.stringify(formData),
+                        contentType: 'application/json',
+                        dataType: 'json',
+                    }).done(function (data) {
+                    });
+                });
+            });
+
         </script>
     </head>
     <body>
@@ -47,7 +65,8 @@
                                                 type="radio"
                                                 name="radio_option"
                                                 value="{{ question_nr }}-{{ question_options[counter.value].char_index }}"
-                                                class="class form-radio h-12 w-12">
+                                                class="class form-radio h-12 w-12"
+                                                id = "radio-button">
                                         <span>
 
                                         {% if not question_options[counter.value].option_text or question_options[counter.value].option_text == 'None' %}
@@ -87,7 +106,8 @@
                                                 type="radio"
                                                 name="radio_option"
                                                 value="{{ question_nr }}-{{ question_options[counter.value].char_index }}"
-                                                class="class form-radio h-12 w-12">
+                                                class="class form-radio h-12 w-12"
+                                                id = "radio-button">
                                         <span>
                                                 {% if not question_options[counter.value].option_text or question_options[counter.value].option_text == 'None' %}
                                                     <code class="ml-6 text-xl">{{ question_options[counter.value].code }}</code>
