@@ -28,11 +28,12 @@
 
                     $.ajax({
                         type: 'POST',
-                        url:"/submit_answer/{{ level_source }}/{{ question_nr }}/{{attempt|int + 1 }}",
+                        url:"/quiz/submit_answer/{{ level_source }}/{{ question_nr }}/{{attempt|int + 1 }}",
                         data: JSON.stringify(formData),
                         contentType: 'application/json',
                         dataType: 'json',
                     }).done(function (data) {
+                        console.log('DATA: ', data)
                     });
                 });
             });
