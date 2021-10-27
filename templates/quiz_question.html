@@ -23,9 +23,9 @@
             $(document).ready(function () {
                 $("form").submit(function (event) {
                     var formData = {
-                        "radioValue": $("#radio-button").val(),
+                        "radioValue": $(this).find('input:radio[name=radio_option]:checked').val() || ''
                     };
-
+                    console.log("radioValue: ",  JSON.stringify(formData))
                     $.ajax({
                         type: 'POST',
                         url:"/quiz/submit_answer/{{ level_source }}/{{ question_nr }}/{{attempt|int + 1 }}",
@@ -87,7 +87,9 @@
                                                 type="radio"
                                                 name="radio_option"
                                                 value="{{ question_nr }}-{{ question_options[counter.value].char_index }}"
-                                                class="class form-radio h-12 w-12" disabled="disabled">
+                                                class="class form-radio h-12 w-12"
+                                                id = "radio-button"
+                                                disabled="disabled">
                                         <span>
                                         {% if not question_options[counter.value].option_text or question_options[counter.value].option_text == 'None' %}
                                             <code class="ml-6 text-xl">{{ question_options[counter.value].code  }}</code>
