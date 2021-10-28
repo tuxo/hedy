@@ -178,12 +178,18 @@ class InvalidTypeException(HedyException):
         super().__init__('Invalid Type', **arguments)
 
 class RequiredArgumentTypeException(HedyException):
-    def __init__(self, **arguments):
-        super().__init__('Required Argument Type', **arguments)
+    def __init__(self, command, required_type, variable=None):
+        super().__init__('Required Argument Type')
+        self.command = command
+        self.required_type = required_type
+        self.variable = variable
 
 class InvalidArgumentTypeException(HedyException):
-    def __init__(self, **arguments):
-        super().__init__('Invalid Argument Type', **arguments)
+    def __init__(self, command, allowed_types, type_used=None):
+        super().__init__('Invalid Argument Type')
+        self.command = command
+        self.allowed_types = allowed_types
+        self.type_used = type_used
 
 class WrongLevelException(HedyException):
     def __init__(self, **arguments):
@@ -649,12 +655,11 @@ class ConvertToPython_1(Transformer):
                     # we first try to raise if we expect 1 thing exactly for more precise error messages
                     if len(allowed_types) == 1:
                         if allowed_types[0] == 'list':
-                            raise hedy.RequiredArgumentTypeException(command=command, variable=assignment.name)
+                            raise hedy.RequiredArgumentTypeException(command, 'list', assignment.name)
                         # here of course we will have a long elif for different types, or maybe we have 1 required exception with a parameter?
 
                     if assignment.type == 'list':
-                        types = ','.join(allowed_types)
-                        raise hedy.InvalidArgumentTypeException(command=command, variable=assignment.name, allowed_types=types)
+                        raise hedy.InvalidArgumentTypeException(command, allowed_types, assignment.type)
                         # same elif here for different types
 
     def get_allowed_types(self, command, level):

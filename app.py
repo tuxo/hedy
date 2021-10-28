@@ -309,6 +309,12 @@ def parse():
     except hedy.ParseException as ex:
         traceback.print_exc()
         response = parse_error_to_response(ex, hedy_errors)
+    except hedy.RequiredArgumentTypeException as ex:
+        traceback.print_exc()
+        response = required_type_to_response(ex, hedy_errors)
+    except hedy.InvalidArgumentTypeException as ex:
+        traceback.print_exc()
+        response = invalid_type_to_response(ex, hedy_errors)
     except hedy.HedyException as ex:
         traceback.print_exc()
         response = hedy_error_to_response(ex, hedy_errors)
@@ -347,15 +353,30 @@ def parse_error_to_response(ex, translations):
         # If we find an invalid keyword, place it in the same location in the error message but without translating
         ex.character_found = ex.keyword_found
     error_message = translate_error(ex.error_code, translations, vars(ex))
-    location = ex.location if hasattr(ex, "location") else None
-    return {"Error": error_message, "Location": location}
+    return to_error_response(error_message, ex)
+
+def invalid_type_to_response(ex, translations):
+    ex.invalid_type = translate_error(ex.type_used, translations)
+    ex.allowed_types = ','.join([translate_error(t, translations) for t in ex.allowed_types])
+    error_message = translate_error(ex.error_code, translations, vars(ex))
+    return to_error_response(error_message, ex)
+
+def required_type_to_response(ex, translations):
+    ex.required_type = translate_error(ex.required_type, translations)
+    error_message = translate_error(ex.error_code, translations, vars(ex))
+    return to_error_response(error_message, ex)
 
 def hedy_error_to_response(ex, translations):
     error_message = translate_error(ex.error_code, translations, ex.arguments)
+    return to_error_response(error_message, ex)
+
+def to_error_response(error_message, ex):
     location = ex.location if hasattr(ex, "location") else None
     return {"Error": error_message, "Location": location}
 
-def translate_error(code, translations, arguments):
+def translate_error(code, translations, arguments=None):
+    if arguments is None:
+        arguments = {}
     error_template = translations[code]
     return error_template.format(**arguments)
 
