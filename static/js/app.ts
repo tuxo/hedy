@@ -128,6 +128,9 @@ export let theGlobalEditor: AceAjax.Editor;
   function turnIntoAceEditor(element: HTMLElement, isReadOnly: boolean): AceAjax.Editor {
     const editor = ace.edit(element);
     editor.setTheme("ace/theme/monokai");
+    editor.setOptions({
+        fixedWidthGutter: true
+      });
     if (isReadOnly) {
       editor.setOptions({
         readOnly: true,
@@ -136,6 +139,7 @@ export let theGlobalEditor: AceAjax.Editor;
         highlightActiveLine: false
       });
     }
+    console.log(editor.getOptions());
 
     // a variable which turns on(1) highlighter or turns it off(0)
     var highlighter = 1;
